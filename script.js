@@ -1,4 +1,5 @@
 var NUM_DOM = 5; // Numero di domande presenti nel quiz
+var punt = 0;
 
 var domande = {// Array con tutte le domande, le risposte e il numero di quella giusta
               // (quello logico, in realtà quello giusto è il precedente)
@@ -33,7 +34,7 @@ var domande = {// Array con tutte le domande, le risposte e il numero di quella 
     ],
     disponibili:
     {
-        val:
+        val: // Array dove ogni posizione è l'indice della domanda corrispondente, true = disponibile
         [
             true, true, true, true, true
         ],
@@ -57,13 +58,13 @@ function log()
     console.log("logging");
     var pag = document.getElementById("login"); // Div del login
     var nome = document.getElementById("nome"); // Input del nome
-    var logbtn = document.getElementById("logbtn"); // Bottone Inizia
+    var logBtn= document.getElementById("logbtn"); // Bottone Inizia
     var error = document.getElementById("error"); // Paragrafo errore con testo rosso
     var nomeVuoto = true; // Variabile per dirmi se il nome è vuoto
 
     pag.style.display = "block"; // Rendo visibile il div del login
 
-    logbtn.onclick = function () // Quando clicco su inizia controllo se il nome e' vuoto
+    logBtn.onclick = function () // Quando clicco su inizia controllo se il nome e' vuoto
     {
         nomeVuoto = (nome.value.length == 0); // nomeVuoto diventa true se la lunghezza del nome == 0
         if (nomeVuoto)
@@ -88,6 +89,70 @@ function log()
     return !nomeVuoto; // Se mi sono loggato nomeVuoto è false, ritorno il contrario di nomeVuoto
 }
 
+function loadQ(n, domanda, row2risp)
+{
+    console.log("\n\n");
+    console.log("Carico " + (n + 1) + " domanda!");
+    var currentq = parseInt((Math.random() * 100)) % (domande.disponibili.getLen()); // Sceglie una domanda casuale (1 volta)
+    while (!(domande.disponibili.val[currentq])) // Finché non sceglie una domanda disponibile (domande.disponibili.val è-
+                                                 // -  un array boolean per ogni domanda)
+    {
+        currentq = parseInt((Math.random() * 100)) % (domande.disponibili.getLen()); // Sceglie una domanda casuale (In caso non-
+                                                                                     // sia disponibile subito)
+    }
+    if (domande.disponibili.val[currentq])
+    {
+        console.log("Domanda scelta: " + (currentq + 1));
+        domande.disponibili.val[currentq] = false; // Tolgo la domanda appena scelta da quelle disponibili
+        domanda.innerHTML = domande.val[currentq][0]; // Carico la domanda appena scelta
+        var numrisp = domande.val[currentq][1].length; // Variabile che tiene il numero di risposte disponibili per la domanda
+        if (numrisp == 4) // In caso le risposte disponibili siano 4, visualizzo anche la seconda riga
+        {
+            row2risp.style.display = "block";
+        }
+        else if (row2risp.style.display != "none")  // In caso siano invece 2, nascondo la seconda riga in caso non sia già-
+                                                    // - stata nascosta 
+        {
+            row2risp.style.display = "none";
+        }
+
+        var num = 1; // Variabile per scorrere le opzioni nella domanda corrente
+        while (num <= numrisp) // Carico le opzioni della domanda appena scelta
+        {
+            var curRisp = document.getElementById(("posto" + num));
+            console.log("num: " + num);
+            curRisp.innerHTML = // Carico l'opzione nella cella con ID pari-
+                                // - a "posto"num (num è un numero, va da 1 a 4), es. posto3
+            domande.val[currentq][1][num - 1]; // domande[currentq][1] è la lista delle risp disponibili
+            var check = function()
+            {
+                console.log("Controllo risposta...");
+                if (((this.parentElement.rowIndex) * (this.parentElement.childElementCount) + this.cellIndex + 1) == 
+                domande.val[currentq][2]) // Quella formula strana qui↑ sopra è per trovare la posizione della cella seguendo-
+                                        // - lo stesso ordine in cui le ho messe nella tabella; lo confronto-
+                                        // - con domande.val[currentq][2] che è il numero della risposta giusta
+                {
+                    console.log("Risposta giusta!");
+                    punt++;
+                    console.log("Punteggio attuale: " + punt);
+                }
+            };
+            curRisp.addEventListener("click", check); // Controllo per vedere se aggiornare il punteggio
+            num ++;
+        }
+
+        var risp = 1; // Ciclo per la rimozione dei click EventListener su tutte le risposte
+        while (risp <= 4)
+        {
+            var curRisp = document.getElementById(("posto" + risp));
+            curRisp.onclick = null;                         // Rimuovo eventuali onclick precedenti, se no si aggiungono-
+            curRisp.removeEventListener("click", check);    // - uno sopra all'altro
+            risp ++;
+        }
+        n ++;
+    }
+}
+
 function quiz() // Visualizzazione quiz
 {
     var pag = document.getElementById("quizwrap"); // Div del quiz
@@ -95,57 +160,17 @@ function quiz() // Visualizzazione quiz
     var domanda = document.getElementById("domanda"); // Paragrafo della domanda
     var row2risp = document.getElementById("rispsecondrow"); // Seconda riga di risposte, dovrò visualizzarla-
                                                              // - solo per le domande con 4 risposte
+    var punt = 0;
     console.log("Inizio quiz!");
     pag.style.display = "block"; // Mostro il campo del quiz
 
     var n = 0;
-    while (n < NUM_DOM) // Visualizzo un numero di domande pari a NUM_DOM
+    loadQ(n, domanda, row2risp); // Carico la prima domanda
+    tab.onclick = function() // Ogni volta che si clicca sulla tabella si clicca su una risposta
     {
-        var loaded = false;
-        if (!loaded) // Se nessuna domanda è caricata, carico una domanda
+        if (n < NUM_DOM)
         {
-            console.log("Carico " + (n + 1) + " domanda!");
-            do {
-                var currentq = parseInt((Math.random() * 100)) % (domande.disponibili.getLen()); // Sceglie una domanda casuale
-            } while (!(domande.disponibili.val[currentq])); // Finché non sceglie una domanda disponibile (domande.disponibili.val è-
-                                                            // -  un array boolean per ogni domanda)
-
-            console.log(currentq);
-            domanda.innerHTML = domande.val[currentq][0]; // Carico la domanda appena scelta
-            var numrisp = domande.val[currentq][1].length; // Variabile che tiene il numero di risposte disponibili per la domanda
-            if (numrisp == 4) // In caso le risposte disponibili siano 4, visualizzo anche la seconda riga
-            {
-                row2risp.style.display = "block";
-            }
-            else if (row2risp.style.display != "block") // In caso siano invece 2, nascondo la seconda riga in caso non sia già-
-                                                        // - stata nascosta 
-            {
-                row2risp.style.display = "block";
-            }
-
-            var num = 1; // Variabile per scorrere le opzioni nella domanda corrente
-            while (num <= numrisp) // Carico le opzioni della domanda appena scelta
-            {
-                var currisp = document.getElementById(("posto" + num));
-                console.log("num: " + num);
-                currisp.innerHTML = // Carico l'opzione nella cella con ID pari-
-                                    // - a "posto"num (num è un numero, va da 1 a 4), es. posto3
-                domande.val[currentq][1][num - 1]; // domande[currentq][1] è la lista delle risp disponibili
-                var check = function()
-                {
-                    if (((currisp.parentElement.rowIndex) * (currisp.parentElement.childElementCount) + currisp.cellIndex + 1) == 
-                    domande.val[currentq][2]) // Quella formula strana sopra è per trovare la posizione della cella seguendo-
-                                              // - lo stesso ordine in cui le ho messe nella tabella; lo confronto-
-                                              // - con domande.val[currentq][2] che è il numero della risposta giusta
-                    {
-                        // Aggiunta punteggio
-                    }
-                };
-                currisp.addEventListener("click", check);
-                num ++;
-            }
-            domande.disponibili.val[n] = false; // Tolgo la domanda appena scelta da quelle disponibili
-            loaded = true;
+            loadQ(n, domanda, row2risp);
             n ++;
         }
     }
