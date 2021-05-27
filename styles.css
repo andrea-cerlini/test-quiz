@@ -1,4 +1,13 @@
+#quizwrap
+{
+    width: 75%;
+    height: fill-content;
+    margin: auto;
+    column-span: 10px;
+}
+
 #domanda
 {
     margin: auto;
+    text-align: center;
 }

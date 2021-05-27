@@ -55,13 +55,13 @@ var domande = { // Array con tutte le domande, le risposte e il numero di quella
 function log()
 {
     console.log("logging");
-    var pag = document.getElementById("login"); // Div del login
+    var loginWrap = document.getElementById("login"); // Div del login
     var nome = document.getElementById("nome"); // Input del nome
     var logBtn= document.getElementById("logbtn"); // Bottone Inizia
     var error = document.getElementById("error"); // Paragrafo errore con testo rosso
     var nomeVuoto = true; // Variabile per dirmi se il nome è vuoto
 
-    pag.style.display = "block"; // Rendo visibile il div del login
+    loginWrap.style.display = "block"; // Rendo visibile il div del login
 
     logBtn.onclick = function () // Quando clicco su inizia controllo se il nome e' vuoto
     {
@@ -81,7 +81,7 @@ function log()
         }
         else // Nome non vuoto, termine login
         {
-            pag.style.display = "none"; // Nascondo div login
+            loginWrap.style.display = "none"; // Nascondo div login
             quiz(); // Faccio partire il quiz
         }
     }
@@ -147,16 +147,24 @@ function loadQ(n, domanda, row2risp)
     }
 }
 
+function end()
+{
+    var gameOverWrap = document.getElementById("endwrap");
+    document.getElementById("fineMsgCorrect").innerHTML = punt;
+    document.getElementById("fineMsgTot").innerHTML = NUM_DOM;
+    document.getElementById("fineMsgPercent").innerHTML = (NUM_DOM/punt) + "%";
+}
+
 function quiz() // Visualizzazione quiz
 {
-    var pag = document.getElementById("quizwrap"); // Div del quiz
+    var quizWrap = document.getElementById("quizwrap"); // Div del quiz
     var tab = document.getElementById("risposte"); // Tabella delle risposte
     var domanda = document.getElementById("domanda"); // Paragrafo della domanda
     var row2risp = document.getElementById("rispsecondrow"); // Seconda riga di risposte, dovrò visualizzarla-
                                                              // - solo per le domande con 4 risposte
 
     console.log("Inizio quiz!");
-    pag.style.display = "block"; // Mostro il campo del quiz
+    quizWrap.style.display = "block"; // Mostro il campo del quiz
 
     var n = 0;
     loadQ(n, domanda, row2risp, punt); // Carico la prima domanda
@@ -171,6 +179,8 @@ function quiz() // Visualizzazione quiz
         else
         {
             tab.onclick = null;
+            quizWrap.style.display = "none";
+            end();
         }
     }
 }
