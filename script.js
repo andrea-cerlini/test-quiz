@@ -156,7 +156,7 @@ function end()
     gameOverWrap.style.display = "block";
     document.getElementById("fineMsgCorrect").innerHTML = punt;
     document.getElementById("fineMsgTot").innerHTML = NUM_DOM;
-    document.getElementById("fineMsgPercent").innerHTML = (NUM_DOM/punt) + "%";
+    document.getElementById("fineMsgPercent").innerHTML = (punt/NUM_DOM) + "%";
 }
 
 function quiz() // Visualizzazione quiz
