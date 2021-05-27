@@ -1,20 +1,19 @@
 var NUM_DOM = 5; // Numero di domande presenti nel quiz
 var punt = 0;
 
-var domande = {// Array con tutte le domande, le risposte e il numero di quella giusta
-              // (quello logico, in realtà quello giusto è il precedente)
+var domande = { // Array con tutte le domande, le risposte e il numero di quella giusta
+                // (quello logico, in realtà quello giusto è il precedente)
     val:
     [
         [
             "Domanda1", // Prima domanda
             ["risp1", "risp2", "risp3", "risp4"], // Risposte disponibili
-            1 // Indice della risposta giusta (in realtà indice + 1)
+             // Indice della risposta giusta (in realtà indice + 1)
         ],
         [
-            "Domanda2",
-            [
+            "Domanda2",[
                 "risp1", "risp2"],
-            4
+            1
         ],
         [
             "Domanda3",
@@ -89,10 +88,10 @@ function log()
     return !nomeVuoto; // Se mi sono loggato nomeVuoto è false, ritorno il contrario di nomeVuoto
 }
 
-function loadQ(n, domanda, row2risp)
+function loadQ(n, domanda, row2risp, punt)
 {
     console.log("\n\n");
-    console.log("Carico " + (n + 1) + " domanda!");
+    console.log("Carico " + (n + 1) + " domanda! (n = " + n + ")");
     var currentq = parseInt((Math.random() * 100)) % (domande.disponibili.getLen()); // Sceglie una domanda casuale (1 volta)
     while (!(domande.disponibili.val[currentq])) // Finché non sceglie una domanda disponibile (domande.disponibili.val è-
                                                  // -  un array boolean per ogni domanda)
@@ -100,6 +99,7 @@ function loadQ(n, domanda, row2risp)
         currentq = parseInt((Math.random() * 100)) % (domande.disponibili.getLen()); // Sceglie una domanda casuale (In caso non-
                                                                                      // sia disponibile subito)
     }
+
     if (domande.disponibili.val[currentq])
     {
         console.log("Domanda scelta: " + (currentq + 1));
@@ -110,8 +110,8 @@ function loadQ(n, domanda, row2risp)
         {
             row2risp.style.display = "block";
         }
-        else if (row2risp.style.display != "none")  // In caso siano invece 2, nascondo la seconda riga in caso non sia già-
-                                                    // - stata nascosta 
+        else if (row2risp.style.display != "none") // In caso siano invece 2, nascondo la seconda riga in caso non sia già-
+                                                   // - stata nascosta 
         {
             row2risp.style.display = "none";
         }
@@ -126,30 +126,26 @@ function loadQ(n, domanda, row2risp)
             domande.val[currentq][1][num - 1]; // domande[currentq][1] è la lista delle risp disponibili
             var check = function()
             {
+                this.removeEventListener("click", check);
+                this.onclick = null; // Rimuovo eventuali onclick precedenti, se no si aggiungono-
+                                     // - uno sopra all'altro
                 console.log("Controllo risposta...");
                 if (((this.parentElement.rowIndex) * (this.parentElement.childElementCount) + this.cellIndex + 1) == 
-                domande.val[currentq][2]) // Quella formula strana qui↑ sopra è per trovare la posizione della cella seguendo-
-                                        // - lo stesso ordine in cui le ho messe nella tabella; lo confronto-
-                                        // - con domande.val[currentq][2] che è il numero della risposta giusta
+                domande.val[currentq][2]) // Quella formula strana sopra è per trovare la posizione della cella seguendo-
+                                          // - lo stesso ordine in cui le ho messe nella tabella; lo confronto-
+                                          // - con domande.val[currentq][2] che è il numero della risposta giusta
                 {
                     console.log("Risposta giusta!");
-                    punt++;
+                    punt ++;
                     console.log("Punteggio attuale: " + punt);
                 }
             };
-            curRisp.addEventListener("click", check); // Controllo per vedere se aggiornare il punteggio
+            curRisp.removeEventListener("click", check);
+            curRisp.onclick = null; // Rimuovo eventuali onclick precedenti, se no si aggiungono-
+                                    // - uno sopra all'altro
+            curRisp.onclick = check;
             num ++;
         }
-
-        var risp = 1; // Ciclo per la rimozione dei click EventListener su tutte le risposte
-        while (risp <= 4)
-        {
-            var curRisp = document.getElementById(("posto" + risp));
-            curRisp.onclick = null;                         // Rimuovo eventuali onclick precedenti, se no si aggiungono-
-            curRisp.removeEventListener("click", check);    // - uno sopra all'altro
-            risp ++;
-        }
-        n ++;
     }
 }
 
@@ -160,12 +156,13 @@ function quiz() // Visualizzazione quiz
     var domanda = document.getElementById("domanda"); // Paragrafo della domanda
     var row2risp = document.getElementById("rispsecondrow"); // Seconda riga di risposte, dovrò visualizzarla-
                                                              // - solo per le domande con 4 risposte
-    var punt = 0;
+
     console.log("Inizio quiz!");
     pag.style.display = "block"; // Mostro il campo del quiz
 
     var n = 0;
-    loadQ(n, domanda, row2risp); // Carico la prima domanda
+    loadQ(n, domanda, row2risp, punt); // Carico la prima domanda
+    n ++;
     tab.onclick = function() // Ogni volta che si clicca sulla tabella si clicca su una risposta
     {
         if (n < NUM_DOM)
@@ -176,12 +173,7 @@ function quiz() // Visualizzazione quiz
     }
 }
 
-function start()
-{
-    log();
-}
-
 window.onload = function ()
 {
-    start(); // Funzione che mostra il div del login
+    log(); // Funzione che mostra il div del login
 }
