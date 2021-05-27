@@ -88,7 +88,7 @@ function log()
     return !nomeVuoto; // Se mi sono loggato nomeVuoto è false, ritorno il contrario di nomeVuoto
 }
 
-function loadQ(n, domanda, row2risp, punt)
+function loadQ(n, domanda, row2risp)
 {
     console.log("\n\n");
     console.log("Carico " + (n + 1) + " domanda! (n = " + n + ")");
@@ -126,7 +126,6 @@ function loadQ(n, domanda, row2risp, punt)
             domande.val[currentq][1][num - 1]; // domande[currentq][1] è la lista delle risp disponibili
             var check = function()
             {
-                this.removeEventListener("click", check);
                 this.onclick = null; // Rimuovo eventuali onclick precedenti, se no si aggiungono-
                                      // - uno sopra all'altro
                 console.log("Controllo risposta...");
@@ -140,7 +139,6 @@ function loadQ(n, domanda, row2risp, punt)
                     console.log("Punteggio attuale: " + punt);
                 }
             };
-            curRisp.removeEventListener("click", check);
             curRisp.onclick = null; // Rimuovo eventuali onclick precedenti, se no si aggiungono-
                                     // - uno sopra all'altro
             curRisp.onclick = check;
@@ -169,6 +167,10 @@ function quiz() // Visualizzazione quiz
         {
             loadQ(n, domanda, row2risp);
             n ++;
+        }
+        else
+        {
+            tab.onclick = null;
         }
     }
 }
