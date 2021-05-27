@@ -54,7 +54,6 @@ var domande = { // Array con tutte le domande, le risposte e il numero di quella
 
 function log()
 {
-    console.log("logging");
     var loginWrap = document.getElementById("login"); // Div del login
     var nome = document.getElementById("nome"); // Input del nome
     var logBtn= document.getElementById("logbtn"); // Bottone Inizia
@@ -91,18 +90,19 @@ function log()
 function loadQ(n, domanda, row2risp)
 {
     console.log("\n\n");
-    console.log("Carico " + (n + 1) + " domanda! (n = " + n + ")");
-    var currentq = parseInt((Math.random() * 100)) % (domande.disponibili.getLen()); // Sceglie una domanda casuale (1 volta)
+    console.log("Carico la " + (n + 1) + "a domanda! (n = " + n + ")\nDomande disponibili: " + domande.disponibili.getLen());
+    var currentq = parseInt((Math.random() * 100)) % (NUM_DOM); // Sceglie una domanda casuale (1 volta)
     while (!(domande.disponibili.val[currentq])) // Finché non sceglie una domanda disponibile (domande.disponibili.val è-
                                                  // -  un array boolean per ogni domanda)
     {
-        currentq = parseInt((Math.random() * 100)) % (domande.disponibili.getLen()); // Sceglie una domanda casuale (In caso non-
-                                                                                     // sia disponibile subito)
+        console.log("Domanda scelta: " + (currentq + 1) + "\nQuesta domanda non va bene!");
+        currentq = parseInt((Math.random() * 100)) % (NUM_DOM); // Sceglie una domanda casuale (In caso non-
+                                                                // sia disponibile subito)
     }
 
     if (domande.disponibili.val[currentq])
     {
-        console.log("Domanda scelta: " + (currentq + 1));
+        console.log("Domanda scelta: Domanda" + (currentq + 1));
         domande.disponibili.val[currentq] = false; // Tolgo la domanda appena scelta da quelle disponibili
         domanda.innerHTML = domande.val[currentq][0]; // Carico la domanda appena scelta
         var numrisp = domande.val[currentq][1].length; // Variabile che tiene il numero di risposte disponibili per la domanda
@@ -120,7 +120,6 @@ function loadQ(n, domanda, row2risp)
         while (num <= numrisp) // Carico le opzioni della domanda appena scelta
         {
             var curRisp = document.getElementById(("posto" + num));
-            console.log("num: " + num);
             curRisp.innerHTML = // Carico l'opzione nella cella con ID pari-
                                 // - a "posto"num (num è un numero, va da 1 a 4), es. posto3
             domande.val[currentq][1][num - 1]; // domande[currentq][1] è la lista delle risp disponibili
@@ -138,6 +137,10 @@ function loadQ(n, domanda, row2risp)
                     punt ++;
                     console.log("Punteggio attuale: " + punt);
                 }
+                else
+                {
+                    console.log("Risposta sbagliata LOL");
+                }
             };
             curRisp.onclick = null; // Rimuovo eventuali onclick precedenti, se no si aggiungono-
                                     // - uno sopra all'altro
@@ -150,6 +153,7 @@ function loadQ(n, domanda, row2risp)
 function end()
 {
     var gameOverWrap = document.getElementById("endwrap");
+    gameOverWrap.style.display = "block";
     document.getElementById("fineMsgCorrect").innerHTML = punt;
     document.getElementById("fineMsgTot").innerHTML = NUM_DOM;
     document.getElementById("fineMsgPercent").innerHTML = (NUM_DOM/punt) + "%";
