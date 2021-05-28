@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="script.js"></script>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <div class="externalWrapper">
-            <div class="loginWrapper hide">
-                <p>Inserire il nome</p>
-                <p class="hide error">Inserire un nome!</p>
-                <input type="text" class="name">
-                <input type="button" class="loginButton" value="Inizia">
-            </div>
-            <div class="quizWrapper hide">
-                <p class="questionParagraph"></p>
-                <table class="answerTable">
-                    <tr>
-                        <td class="answers answer1">
-                        </td>
-                        <td class="answers answer2">
-                        </td>
-                    </tr>
-                    <tr class="hide secondRowOfAnswerTable">
-                        <td class="answers answer3">
-                        </td>
-                        <td class="answers answer4">
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="gameOverWrapper hide">
-                <h2 class="msgFineQuiz">
-                    Quiz terminato
-                </h2>
-                <div>
-                    <p class="fineMsgWrap">
-                        Risposte esatte: <span class="fineMsgCorrect"></span> su <span class="fineMsgTot"></span>
-                    </p>
-                    <p class="fineMsgPercentWrap">
-                        Percentuale: <span class="fineMsgPercent"></span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </body>
+	<head>
+		<script src="script.js"></script>
+		<link rel="stylesheet" href="styles.css" />
+	</head>
+	<body>
+		<div class="external-wrapper">
+			<div class="login-wrapper hide">
+				<p>Inserire il nome</p>
+				<p class="hide error">Inserire un nome!</p>
+				<input type="text" class="name" />
+				<input type="button" class="login-button" value="Inizia" />
+			</div>
+			<div class="quiz-wrapper hide">
+				<p class="question-paragraph"></p>
+				<table class="answer-table">
+					<tr>
+						<td class="answers answer1"></td>
+						<td class="answers answer2"></td>
+					</tr>
+					<tr class="hide second-row-of-answer-table">
+						<td class="answers answer3"></td>
+						<td class="answers answer4"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="game-over-wrapper hide">
+				<h2 class="msg-fine-quiz">Quiz terminato</h2>
+				<div>
+					<p class="fine-msg-wrap">
+						Risposte esatte:
+						<span class="fine-msg-correct"></span> su
+						<span class="fine-msg-tot"></span>
+					</p>
+					<p class="fine-msg-percent-wrap">
+						Percentuale: <span class="fine-msg-percent"></span>
+					</p>
+					<p class="fine-msg-percent-wrap">
+						Best score di <span class="fine-msg-best"></span>
+					</p>
+				</div>
+				<input type="button" class="restart-button" value="Restart" />
+			</div>
+		</div>
+	</body>
 </html>

@@ -1,19 +1,19 @@
-#quizWrapper {
-  width: 75%;
-  height: fill-content;
-  margin: auto;
-  column-span: 10px;
+.quiz-wrapper {
+	width: 75%;
+	height: fill-content;
+	margin: auto;
+	column-span: 10px;
 }
 
-#question {
-  margin: auto;
-  text-align: center;
+.question {
+	margin: auto;
+	text-align: center;
 }
 
 .hide {
-  display: none;
+	display: none;
 }
 
 .error {
-  color: red;
+	color: rgb(255, 73, 73);
 }
