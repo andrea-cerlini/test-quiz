@@ -5,40 +5,40 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <div id="wrapper">
-            <div id="login" style="display: none;">
+        <div class="externalWrapper">
+            <div class="loginWrapper hide">
                 <p>Inserire il nome</p>
-                <p id="error" style="display: none; color: red;">Inserire un nome!</p>
-                <input type="text" id="nome">
-                <input type="button" id="logbtn" value="Inizia">
+                <p class="hide error">Inserire un nome!</p>
+                <input type="text" class="name">
+                <input type="button" class="loginButton" value="Inizia">
             </div>
-            <div id="quizwrap" style="display:none;">
-                <p id="domanda"></p>
-                <table id="risposte">
+            <div class="quizWrapper hide">
+                <p class="questionParagraph"></p>
+                <table class="answerTable">
                     <tr>
-                        <td id="posto1">
+                        <td class="answers answer1">
                         </td>
-                        <td id="posto2">
+                        <td class="answers answer2">
                         </td>
                     </tr>
-                    <tr style="display: none" id="rispsecondrow">
-                        <td id="posto3">
+                    <tr class="hide secondRowOfAnswerTable">
+                        <td class="answers answer3">
                         </td>
-                        <td id="posto4">
+                        <td class="answers answer4">
                         </td>
                     </tr>
                 </table>
             </div>
-            <div id="endwrap" style="display: none">
-                <h2 id="msgFineQuiz">
+            <div class="gameOverWrapper hide">
+                <h2 class="msgFineQuiz">
                     Quiz terminato
                 </h2>
                 <div>
-                    <p id="fineMsgWrap">
-                        Risposte esatte: <span id="fineMsgCorrect"></span> su <span id="fineMsgTot"></span>
+                    <p class="fineMsgWrap">
+                        Risposte esatte: <span class="fineMsgCorrect"></span> su <span class="fineMsgTot"></span>
                     </p>
-                    <p id="fineMsgPercentWrap">
-                        Percentuale: <span id="fineMsgPercent"></span>
+                    <p class="fineMsgPercentWrap">
+                        Percentuale: <span class="fineMsgPercent"></span>
                     </p>
                 </div>
             </div>

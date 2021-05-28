@@ -1,75 +1,69 @@
-var NUM_DOM = 5; // Numero di domande presenti nel quiz
-var punt = 0;
+const QUESTION_NUMBER = 5; // Numero di questionDatabase presenti nel quiz
+var score = 0;
 
-var domande = { // Array con tutte le domande, le risposte e il numero di quella giusta
-                // (quello logico, in realtà quello giusto è il precedente)
-    val:
-    [
-        [
-            "Domanda1", // Prima domanda
-            ["risp1", "risp2", "risp3", "risp4"], // Risposte disponibili
-             // Indice della risposta giusta (in realtà indice + 1)
-        ],
-        [
-            "Domanda2",[
-                "risp1", "risp2"],
-            1
-        ],
-        [
-            "Domanda3",
-            ["risp1", "risp2", "risp3", "risp4"],
-            3
-        ],
-        [
-            "Domanda4",
-            ["risp1", "risp2", "risp3", "risp4"],
-            2
-        ],
-        [
-            "Domanda5",
-            ["risp1", "risp2", "risp3", "risp4"],
-            4
-        ]
-    ],
-    disponibili:
+var questionDatabase = [ // Array con tutte le domande, le risposte, il numero di quella giusta, la disponibilità
     {
-        val: // Array dove ogni posizione è l'indice della domanda corrispondente, true = disponibile
-        [
-            true, true, true, true, true
-        ],
-        getLen: function()
+        question: "Domanda1", // Prima question
+        answers: ["risp1", "risp2", "risp3", "risp4"], // Risposte disponibili
+        indexOfCorrectAnswer: 2, // Indice della risposta giusta
+        available: true
+    },
+    {
+        question: "Domanda2",
+        answers: ["risp1", "risp2", "risp3", "risp4"],
+        indexOfCorrectAnswer: 2,
+        available: true
+    },
+    {
+        question: "Domanda3",
+        answers: ["risp1", "risp2", "risp3", "risp4"],
+        indexOfCorrectAnswer: 2,
+        available: true
+    },
+    {
+        question: "Domanda4",
+        answers: ["risp1", "risp2", "risp3", "risp4"],
+        indexOfCorrectAnswer: 2,
+        available: true
+    },
+    {
+        question: "Domanda5",
+        answers: ["risp1", "risp2", "risp3", "risp4"],
+        indexOfCorrectAnswer: 2,
+        available: true
+    },
+    function getLen()
+    {
+        var len = 0;
+        for (var i = 0; i < this.length; i ++)
         {
-            var len = 0;
-            for (var i = 0; i < this.val.length; i ++)
+            if (this[i].available)
             {
-                if (this.val[i])
-                {
-                    len ++;
-                }
+                len ++;
             }
-            return len;
         }
+        return len;
     }
-}
+];
 
-function log()
+function login()
 {
-    var loginWrap = document.getElementById("login"); // Div del login
-    var nome = document.getElementById("nome"); // Input del nome
-    var logBtn= document.getElementById("logbtn"); // Bottone Inizia
-    var error = document.getElementById("error"); // Paragrafo errore con testo rosso
-    var nomeVuoto = true; // Variabile per dirmi se il nome è vuoto
+    var loginWrap = document.getElementsByClassName("loginWrapper").item(0); // Div del login
+    var name = document.getElementsByClassName("name").item(0); // Input del name
+    var loginButton = document.getElementsByClassName("loginButton").item(0); // Bottone Inizia
+    var error = document.getElementsByClassName("error").item(0); // Paragrafo errore con testo rosso
+    var nameIsEmpty = true; // Variabile per dirmi se il name è vuoto
 
-    loginWrap.style.display = "block"; // Rendo visibile il div del login
+    loginWrap.classList.remove("hide"); // Rendo visibile il div del login
 
-    logBtn.onclick = function () // Quando clicco su inizia controllo se il nome e' vuoto
+    loginButton.onclick = function () // Quando clicco su inizia controllo se il name e' vuoto
     {
-        nomeVuoto = (nome.value.length == 0); // nomeVuoto diventa true se la lunghezza del nome == 0
-        if (nomeVuoto)
+        nameIsEmpty = (name.value.length == 0); // nameIsEmpty diventa true se la lunghezza del name == 0
+        if (nameIsEmpty)
         {
-            if (error.style.display != "block") // Prima volta che mostro l'errore
+            if (error.style.display != "") // Prima volta che mostro l'errore
             {
-                error.style.display = "block";
+                error.classList.remove("hide");
             }
             /*
             else
@@ -78,73 +72,72 @@ function log()
             }
             */
         }
-        else // Nome non vuoto, termine login
+        else // name non vuoto, termine login
         {
-            loginWrap.style.display = "none"; // Nascondo div login
+            loginWrap.classList.add("hide"); // Nascondo div login
             quiz(); // Faccio partire il quiz
         }
     }
-    return !nomeVuoto; // Se mi sono loggato nomeVuoto è false, ritorno il contrario di nomeVuoto
+    return !nameIsEmpty; // Se mi sono loggato nameIsEmpty è false, ritorno il contrario di nameIsEmpty
 }
 
-function loadQ(n, domanda, row2risp)
+function loadQuestion(n, question, secondRowOfAnswerTable)
 {
-    console.log("\n\n");
-    console.log("Carico la " + (n + 1) + "a domanda! (n = " + n + ")\nDomande disponibili: " + domande.disponibili.getLen());
-    var currentq = parseInt((Math.random() * 100)) % (NUM_DOM); // Sceglie una domanda casuale (1 volta)
-    while (!(domande.disponibili.val[currentq])) // Finché non sceglie una domanda disponibile (domande.disponibili.val è-
-                                                 // -  un array boolean per ogni domanda)
+    console.log("\n\nCarico la " + (n + 1) + "a question! (n = " + n + ")\nDomande disponibili: " + questionDatabase[5]()); // All'indice 5 c'è getLen
+    var currentQuestion = parseInt((Math.random() * 100)) % (QUESTION_NUMBER); // Sceglie una question casuale (1 volta)
+    while (!(questionDatabase[currentQuestion].available)) // Finché non sceglie una question available (questionDatabase.disponibili.val è-
+                                                    // -  un array boolean per ogni question)
     {
-        console.log("Domanda scelta: " + (currentq + 1) + "\nQuesta domanda non va bene!");
-        currentq = parseInt((Math.random() * 100)) % (NUM_DOM); // Sceglie una domanda casuale (In caso non-
-                                                                // sia disponibile subito)
+        console.log("Domanda scelta: " + (currentQuestion + 1) + "\nQuesta question non va bene!");
+        currentQuestion = parseInt((Math.random() * 100)) % (QUESTION_NUMBER); // Sceglie una question casuale (In caso non-
+                                                                       // sia available subito)
     }
 
-    if (domande.disponibili.val[currentq])
+    if (questionDatabase[currentQuestion].available)
     {
-        console.log("Domanda scelta: Domanda" + (currentq + 1));
-        domande.disponibili.val[currentq] = false; // Tolgo la domanda appena scelta da quelle disponibili
-        domanda.innerHTML = domande.val[currentq][0]; // Carico la domanda appena scelta
-        var numrisp = domande.val[currentq][1].length; // Variabile che tiene il numero di risposte disponibili per la domanda
-        if (numrisp == 4) // In caso le risposte disponibili siano 4, visualizzo anche la seconda riga
+        console.log("Domanda scelta: Domanda" + (currentQuestion + 1));
+        questionDatabase[currentQuestion].available = false; // Flaggo la question appena scelta come non disponibile
+        question.innerHTML = questionDatabase[currentQuestion].question; // Carico la question appena scelta
+        var answerNumber = questionDatabase[currentQuestion].answers.length; // Variabile che tiene il numero di risposte disponibili per la question
+        if (answerNumber == 4) // In caso le risposte disponibili siano 4, visualizzo anche la seconda riga
         {
-            row2risp.style.display = "block";
+            secondRowOfAnswerTable.classList.remove("hide");
         }
-        else if (row2risp.style.display != "none") // In caso siano invece 2, nascondo la seconda riga in caso non sia già-
-                                                   // - stata nascosta 
+        else if (!secondRowOfAnswerTable.classList.contains("hide")) // In caso siano invece 2, nascondo la seconda riga in caso non sia già-
+                                                                 // - stata nascosta 
         {
-            row2risp.style.display = "none";
+            secondRowOfAnswerTable.classList.add("hide");
         }
 
-        var num = 1; // Variabile per scorrere le opzioni nella domanda corrente
-        while (num <= numrisp) // Carico le opzioni della domanda appena scelta
+        var num = 1; // Variabile per scorrere le opzioni nella question corrente
+        while (num <= answerNumber) // Carico le opzioni della question appena scelta
         {
-            var curRisp = document.getElementById(("posto" + num));
-            curRisp.innerHTML = // Carico l'opzione nella cella con ID pari-
-                                // - a "posto"num (num è un numero, va da 1 a 4), es. posto3
-            domande.val[currentq][1][num - 1]; // domande[currentq][1] è la lista delle risp disponibili
-            var check = function()
+            var currentAnswer = document.getElementsByClassName("answers")[num - 1];
+            currentAnswer.innerHTML = // Carico l'opzione nella cella con ID pari-
+                                      // - a "posto"num (num è un numero, va da 1 a 4), es. posto3
+            questionDatabase[currentQuestion].answers[num - 1]; // questionDatabase[currentQuestion][1] è la lista delle answers disponibili
+            var checkFunction = function()
             {
                 this.onclick = null; // Rimuovo eventuali onclick precedenti, se no si aggiungono-
                                      // - uno sopra all'altro
                 console.log("Controllo risposta...");
                 if (((this.parentElement.rowIndex) * (this.parentElement.childElementCount) + this.cellIndex + 1) == 
-                domande.val[currentq][2]) // Quella formula strana sopra è per trovare la posizione della cella seguendo-
-                                          // - lo stesso ordine in cui le ho messe nella tabella; lo confronto-
-                                          // - con domande.val[currentq][2] che è il numero della risposta giusta
+                questionDatabase[currentQuestion].indexOfCorrectAnswer) // Quella formula strana sopra è per trovare la posizione della cella seguendo-
+                                                                        // - lo stesso ordine in cui le ho messe nella tabella; lo confronto-
+                                                                        // - con questionDatabase.val[currentQuestion][2] che è il numero della risposta giusta
                 {
                     console.log("Risposta giusta!");
-                    punt ++;
-                    console.log("Punteggio attuale: " + punt);
+                    score ++;
+                    console.log("Punteggio attuale: " + score);
                 }
                 else
                 {
                     console.log("Risposta sbagliata LOL");
                 }
             };
-            curRisp.onclick = null; // Rimuovo eventuali onclick precedenti, se no si aggiungono-
-                                    // - uno sopra all'altro
-            curRisp.onclick = check;
+            currentAnswer.onclick = null; // Rimuovo eventuali onclick precedenti, se no si aggiungono-
+                                          // - uno sopra all'altro
+            currentAnswer.onclick = checkFunction;
             num ++;
         }
     }
@@ -152,38 +145,59 @@ function loadQ(n, domanda, row2risp)
 
 function end()
 {
-    var gameOverWrap = document.getElementById("endwrap");
-    gameOverWrap.style.display = "block";
-    document.getElementById("fineMsgCorrect").innerHTML = punt;
-    document.getElementById("fineMsgTot").innerHTML = NUM_DOM;
-    document.getElementById("fineMsgPercent").innerHTML = (punt/NUM_DOM) + "%";
+    var gameOverWrapper = document.getElementsByClassName("gameOverWrapper").item(0);
+    gameOverWrapper.classList.remove("hide");
+    document.getElementsByClassName("fineMsgCorrect").item(0).innerHTML = score;
+    document.getElementsByClassName("fineMsgTot").item(0).innerHTML = QUESTION_NUMBER;
+    document.getElementsByClassName("fineMsgPercent").item(0).innerHTML = (score*100/QUESTION_NUMBER) + "%";
 }
+/*
+function cellClick()
+{
+    var found = false;
+    var cellArray = document.getElementsByClassName("answer");
+    for (var i = 0; i < cellArray.length; i ++)
+    {
+        if (cellArray.item(i) === document.activeElement) // Trovato su internet, per vedere se l'elemento è cliccato
+        {
+            found = true;
+            for (var j = 0; j < cellArray.length; j ++)
+            {
+                cellArray.item(j).onclick = null; // Rimuovo l'onclick su tutte le celle
+            }
+        }
+    }
+    return found;
+} */
 
 function quiz() // Visualizzazione quiz
 {
-    var quizWrap = document.getElementById("quizwrap"); // Div del quiz
-    var tab = document.getElementById("risposte"); // Tabella delle risposte
-    var domanda = document.getElementById("domanda"); // Paragrafo della domanda
-    var row2risp = document.getElementById("rispsecondrow"); // Seconda riga di risposte, dovrò visualizzarla-
-                                                             // - solo per le domande con 4 risposte
+    var quizWrapper = document.getElementsByClassName("quizWrapper").item(0); // Div del quiz
+    var answersTable = document.getElementsByClassName("answerTable").item(0); // Tabella delle risposte
+    var question = document.getElementsByClassName("questionParagraph").item(0); // Paragrafo della question
+    var secondRowOfAnswerTable = document.getElementsByClassName("secondRowOfAnswerTable").item(0); // Seconda riga di risposte, dovrò visualizzarla-
+                                                                                                    // - solo per le questionDatabase con 4 risposte
 
     console.log("Inizio quiz!");
-    quizWrap.style.display = "block"; // Mostro il campo del quiz
+    quizWrapper.classList.remove("hide"); // Mostro il campo del quiz
 
     var n = 0;
-    loadQ(n, domanda, row2risp, punt); // Carico la prima domanda
+    loadQuestion(n, question, secondRowOfAnswerTable); // Carico la prima question
     n ++;
-    tab.onclick = function() // Ogni volta che si clicca sulla tabella si clicca su una risposta
+    answersTable.onclick = function() // Ogni volta che si clicca sulla tabella
     {
-        if (n < NUM_DOM)
+        if (n < QUESTION_NUMBER)
         {
-            loadQ(n, domanda, row2risp);
-            n ++;
+            if (true /*cellClick()*/) // Solo se schiaccia in una cella, va avanti
+            {
+                loadQuestion(n, question, secondRowOfAnswerTable);
+                n ++;
+            }
         }
         else
         {
-            tab.onclick = null;
-            quizWrap.style.display = "none";
+            answersTable.onclick = null;
+            quizWrapper.classList.add("hide");
             end();
         }
     }
@@ -191,5 +205,5 @@ function quiz() // Visualizzazione quiz
 
 window.onload = function ()
 {
-    log(); // Funzione che mostra il div del login
+    login(); // Funzione che mostra il div del login
 }
