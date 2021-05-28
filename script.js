@@ -1,4 +1,4 @@
-const QUESTION_NUMBER = 5; // Numero di domande presenti nel quiz
+const QUESTION_NUMBER = 7; // Numero di domande presenti nel quiz
 var score = 0;
 var n = 0;
 var currentQuestion;
@@ -6,33 +6,63 @@ var playerDatabase = new Array();
 
 var questionDatabase = [ // Array con tutte le domande, le risposte, il numero di quella giusta, la disponibilità
     {
-        question: "Domanda1", // Prima question
-        answers: ["risp1", "risp2", "risp3", "risp4"], // Risposte disponibili
-        indexOfCorrectAnswer: 2, // Indice della risposta giusta
+        question: "Che anno viene dopo il 2020?", // Prima question
+        answers: ["2200", "-3", "tabasco", "2021"], // Risposte disponibili
+        indexOfCorrectAnswer: 4, // Indice della risposta giusta (indice fisico, quello logico è il successivo)
         isAvailable: true
     },
     {
-        question: "Domanda2",
-        answers: ["risp1", "risp2", "risp3", "risp4"],
+        question: "Quanto potassio c'e' in una banana?",
+        answers: ["Meno infinito", "In media circa il 9%", "Esattamente 4 chilometri", "Le banane sono in realta' radioattive"],
+        indexOfTheCorrectAnswer: 2,
+        isAvailable: true
+    },
+    {
+        question: "Ludwig Van Beethoven e' ancora vivo?",
+        answers: ["No, e' tipo morto due secoli fa", "Certo =)", "E' morto stamattina", "Si, ma non per molto"],
+        indexOfCorrectAnswer: 1,
+        isAvailable: true
+    },
+    {
+        question: "Che forma ha il display di un televisore standard?",
+        answers: ["Verde", "Icosaedro tronco", "Triangolo", "Rettangolo"],
+        indexOfCorrectAnswer: 4,
+        isAvailable: true
+    },
+    {
+        question: "Vero o falso? Gli umani respirano aria",
+        answers: ["Vero", "Falso"],
+        indexOfCorrectAnswer: 1,
+        isAvailable: true
+    },
+    {
+        question: "Quale di queste opzioni e' il nome di un giorno della settimana?",
+        answers: ["Ginevro", "42", "Sabato", "Domanica"],
+        indexOfCorrectAnswer: 3,
+        isAvailable: true
+    },
+    {
+        question: "Vero o falso? Il sole non e' luminoso",
+        answers: ["Vero", "Falso"],
         indexOfCorrectAnswer: 2,
         isAvailable: true
     },
     {
-        question: "Domanda3",
-        answers: ["risp1", "risp2", "risp3", "risp4"],
+        question: "Quanto fa 1+1 (nella matematica classica)?",
+        answers: ["Mille", "La matematica e' sopravvalutata", "2", "Radice cubica di e"],
+        indexOfCorrectAnswer: 3,
+        isAvailable: true
+    },
+    {
+        question: "Domanda",
+        answers: ["Risposta sbagliata", "Risposta giusta", "Risposta sbagliata", "Risposta non non sbagliata"],
         indexOfCorrectAnswer: 2,
         isAvailable: true
     },
     {
-        question: "Domanda4",
-        answers: ["risp1", "risp2", "risp3", "risp4"],
-        indexOfCorrectAnswer: 2,
-        isAvailable: true
-    },
-    {
-        question: "Domanda5",
-        answers: ["risp1", "risp2", "risp3", "risp4"],
-        indexOfCorrectAnswer: 2,
+        question: "Di che colore sono le arance?",
+        answers: ["Nero", "Grillotalpa", "Giallo", "Arancione"],
+        indexOfCorrectAnswer: 4,
         isAvailable: true
     }
 ];
@@ -98,7 +128,6 @@ function loadQuestion(n, question, secondRowOfAnswerTable) {
         var answerNumber = questionDatabase[currentQuestion].answers.length; // Variabile che tiene il numero di risposte disponibili per la question
         if (answerNumber == 4) // In caso le risposte disponibili siano 4, visualizzo anche la seconda riga
         {
-            console.log("CurrentQuestion: " + currentQuestion);
             secondRowOfAnswerTable.classList.remove("hide");
         }
         else if (!secondRowOfAnswerTable.classList.contains("hide")) // In caso siano invece 2, nascondo la seconda riga in caso non sia già-
@@ -184,16 +213,12 @@ function cellClick()
 }
 */
 
-function checkFunction(cell) {
+function checkFunction(currentAnswerNum) {
     var question = document.getElementsByClassName("question-paragraph").item(0); // Paragrafo della question
     var secondRowOfAnswerTable = document.getElementsByClassName("second-row-of-answer-table").item(0); // Seconda riga risposte
     console.log("Controllo risposta...");
-    if (((cell.parentElement.rowIndex) * (cell.parentElement.childElementCount) + cell.cellIndex + 1) ==
-        questionDatabase[currentQuestion].indexOfCorrectAnswer) // Quella formula strana sopra è per trovare la posizione della cella seguendo-
-    // - lo stesso ordine in cui le ho messe nella tabella; lo confronto-
-    // - con questionDatabase[cell].indexOfCorrectAnswer che è il numero-
-    // - della risposta giusta
-    {
+    if (currentAnswerNum == questionDatabase[currentQuestion].indexOfCorrectAnswer) { // Controllo se l'indice della risposta corrente-
+        // - è uguale a quella giusta per questa domanda
         console.log("Risposta giusta!");
         score++;
         console.log("Punteggio attuale: " + score);
@@ -203,8 +228,8 @@ function checkFunction(cell) {
         console.log("Punteggio attuale: " + score);
     }
     if (n < QUESTION_NUMBER) { // Finché non finiscono le domande
-        n++;
         loadQuestion(n, question, secondRowOfAnswerTable);
+        n++;
     }
     else { // Quiz finito
         document.getElementsByClassName("quiz-wrapper").item(0).classList.add("hide");
@@ -216,6 +241,7 @@ function checkFunction(cell) {
 function quiz() // Visualizzazione quiz
 {
     var cellArray = document.getElementsByClassName("answers");
+    var answerTable = document.getElementsByClassName("answer-table").item(0);
     var quizWrapper = document.getElementsByClassName("quiz-wrapper").item(0); // Div del quiz
     var question = document.getElementsByClassName("question-paragraph").item(0); // Paragrafo della question
     var secondRowOfAnswerTable = document.getElementsByClassName("second-row-of-answer-table").item(0); // Seconda riga di risposte, dovrò visualizzarla-
@@ -223,15 +249,17 @@ function quiz() // Visualizzazione quiz
     console.log("Inizio quiz!");
     quizWrapper.classList.remove("hide"); // Mostro il campo del quiz
 
-    for (var i = 0; i < 4; i++) // Scorro tutte le caselle della tabella
+    for (var i = 0; i < answerTable.rows.length * answerTable.rows[0].cells.length; i++) // Scorro tutte le caselle della tabella
     {
         checkThis = function () {
-            checkFunction(this);
+            checkFunction((this.parentElement.rowIndex) * (this.parentElement.childElementCount) + this.cellIndex + 1) // Calcolo dell'indice:
+            // Numero righe precedenti, per la loro lunghezza, + il numero di caselle prima di quella corrente (che è pari al suo indice nella riga)
         };
-        cellArray.item(i).onclick = null; // Resetto l'onclick sulle risposte, in caso di riavvio del quiz
+        if (cellArray.item(i).onclick != null) {
+            cellArray.item(i).onclick = null; // Resetto l'onclick sulle risposte, in caso di riavvio del quiz
+        }
         cellArray.item(i).onclick = checkThis;
     }
-
     loadQuestion(n, question, secondRowOfAnswerTable); // Carico la prima question
     n++;
 }
