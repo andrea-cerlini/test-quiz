@@ -126,7 +126,7 @@ function updateDatabase() {
     for (var i = 0; i < playerDatabase.length; i++) { // Scorro la lista dei giocatori nel database per vedere se già c'è
         if (playerName == playerDatabase[i].name) { // Guardo tra i nomi se c'è quello del giocatore corrente
             console.log("Giocatore esistente!");
-            if (score > playerDatabase[i].best) { // Se il giocatore è presente, vedo se il suo score è maggiore del best
+            if (score > playerDatabase[i].bestScore) { // Se il giocatore è presente, vedo se il suo score è maggiore del best
                 playerDatabase[i].bestScore = score;
             }
             found = true;
