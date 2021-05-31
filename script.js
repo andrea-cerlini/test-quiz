@@ -1,4 +1,4 @@
-const QUESTION_NUMBER = 7; // Numero di domande presenti nel quiz
+const QUESTION_NUMBER = 10; // Numero di domande presenti nel quiz
 var score = 0;
 var n = 0;
 var currentQuestion;
@@ -64,6 +64,36 @@ var questionDatabase = [ // Array con tutte le domande, le risposte, il numero d
         question: "Di che colore sono le arance?",
         answers: ["Nero", "Grillotalpa", "Giallo", "Arancione"],
         indexOfTheCorrectAnswer: 4
+        // isAvailable: true
+    },
+    {
+        question: "Quante 'C' ci sono nella parola CIAO?",
+        answers: ["Una sola", "Cento", "Fotosintesi clorofilliana", "Zero"],
+        indexOfTheCorrectAnswer: 1
+        // isAvailable: true
+    },
+    {
+        question: "In che Stato si trova Roma?",
+        answers: ["Quattro", "Repubblica di Venezia", "Italia", "Roma non esiste"],
+        indexOfTheCorrectAnswer: 3
+        // isAvailable: true
+    },
+    {
+        question: "Vero o falso? Un chilo di cipolle pesa un chilo",
+        answers: ["Falso", "Vero"],
+        indexOfTheCorrectAnswer: 2
+        // isAvailable: true
+    },
+    {
+        question: "Che forma hanno gli occhi umani?",
+        answers: ["Piramidale", "Scarsa, non hanno muscoli", "Cubica", "Sferica, approssimativamente"],
+        indexOfTheCorrectAnswer: 4
+        // isAvailable: true
+    },
+    {
+        question: "Vero o falso? Il monte Everest e' piu' alto di un uomo",
+        answers: ["Vero", "Falso", "No", "Aceto"],
+        indexOfTheCorrectAnswer: 1
         // isAvailable: true
     }
 ];
