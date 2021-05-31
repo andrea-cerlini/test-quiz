@@ -3,14 +3,20 @@
 	<head>
 		<script src="script.js"></script>
 		<link rel="stylesheet" href="styles.css" />
+		<title>Quiz :)</title>
 	</head>
 	<body>
 		<div class="external-wrapper">
 			<div class="login-wrapper hide">
-				<p>Inserire il nome</p>
-				<p class="hide error">Inserire un nome!</p>
+				<h2 class="login-title">Login</h2>
+				<p class="login-message">Inserisci il tuo nome</p>
+				<p class="hide error">Inserisci un nome!</p>
 				<input type="text" class="name" />
-				<input type="button" class="login-button" value="Inizia" />
+				<input
+					type="button"
+					class="login-button"
+					value="Inizia il quiz"
+				/>
 			</div>
 			<div class="quiz-wrapper hide">
 				<p class="question-paragraph"></p>
@@ -30,14 +36,16 @@
 				<div>
 					<p class="fine-msg-wrap">
 						Risposte esatte:
-						<span class="fine-msg-correct"></span> su
-						<span class="fine-msg-tot"></span>
+						<span class="fine-msg-correct"></span>
 					</p>
 					<p class="fine-msg-percent-wrap">
-						Percentuale: <span class="fine-msg-percent"></span>
+						Percentuale risposte esatte:
+						<span class="fine-msg-percent"></span>
 					</p>
-					<p class="fine-msg-percent-wrap">
-						Best score di <span class="fine-msg-best"></span>
+					<p class="fine-msg-best-wrap">
+						Migliore punteggio di
+						<span class="fine-msg-best-name"></span>:
+						<span class="fine-msg-best"></span>
 					</p>
 				</div>
 				<input type="button" class="restart-button" value="Restart" />

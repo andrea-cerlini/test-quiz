@@ -1,13 +1,83 @@
-.quiz-wrapper {
+body {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	user-select: none;
+}
+
+.external-wrapper {
 	width: 75%;
 	height: fill-content;
 	margin: auto;
-	column-span: 10px;
+	margin-top: 10%;
 }
 
-.question {
-	margin: auto;
+.login-title {
 	text-align: center;
+	font-weight: 500;
+	color: rgb(63, 109, 184);
+}
+
+.login-message {
+	text-align: center;
+	font-weight: 600;
+	font-size: 20px;
+	color: #555;
+}
+
+.name {
+	display: block;
+	width: 40%;
+	margin: auto;
+	margin-top: 2.5%;
+	text-align: center;
+	padding: 5px 8px;
+	background-color: rgba(133, 180, 255, 0.4);
+	color: #444;
+	transition: 0.4s;
+	border: 2px solid #777;
+	border-radius: 5px;
+	font-size: 18px;
+	outline: none;
+}
+
+.name:hover {
+	background-color: rgba(177, 206, 250, 0.3);
+	transition: 0.4s;
+}
+
+.name:focus {
+	background-color: rgba(166, 200, 255, 0.3);
+	border: 2px solid #444;
+	transition: 0.4s;
+}
+
+.login-button {
+	background-color: rgb(74, 133, 228);
+	border: none;
+	color: white;
+	display: block;
+	padding: 15px 35px;
+	font-size: 20px;
+	margin: auto;
+	margin-top: 5%;
+	font-weight: 500;
+	border-radius: 30px;
+	box-shadow: 5px 5px 10px rgba(101, 131, 179, 0.5);
+	transition: 0.4s;
+	cursor: pointer;
+}
+
+.login-button:hover {
+	background-color: rgb(111, 155, 226);
+	box-shadow: 6px 6px 15px rgba(65, 89, 128, 0.5);
+	color: #444;
+	transition: 0.4s;
+}
+
+.login-button:active {
+	background-color: rgb(63, 109, 184);
+	box-shadow: 2px 2px 10px rgba(65, 89, 128, 0.8);
+	color: white;
+	transition: 0.4s;
 }
 
 .hide {
@@ -16,4 +86,110 @@
 
 .error {
 	color: rgb(255, 73, 73);
+	text-align: center;
+}
+
+.question-paragraph {
+	text-align: center;
+	font-size: 30px;
+}
+
+.answer-table {
+	border-spacing: 15px;
+	width: 100%;
+}
+
+td {
+	width: 25%;
+	padding: 5% 0;
+	border-radius: 5px;
+	text-align: center;
+	background-color: rgb(73, 137, 211);
+	color: white;
+	font-size: 25px;
+	font-weight: 300;
+	cursor: pointer;
+	border: 2px solid #555;
+	transition: 0.4s;
+}
+
+td:hover {
+	background-color: rgb(107, 155, 211);
+	border: 2px solid #777;
+	transition: 0.4s;
+}
+
+td:active {
+	background-color: rgba(99, 150, 209, 0.5);
+	border: 2px solid #333;
+	color: #444;
+	transition: 0.4s;
+}
+
+.msg-fine-quiz {
+	text-align: center;
+	font-weight: 500;
+	color: rgb(63, 109, 184);
+}
+
+.fine-msg-wrap {
+	font-size: 20px;
+}
+
+.fine-msg-correct {
+	font-weight: 300;
+}
+
+.fine-msg-percent-wrap {
+	font-size: 20px;
+}
+
+.fine-msg-percent {
+	font-weight: 300;
+}
+
+.fine-msg-best-wrap {
+	font-size: 20px;
+}
+
+.fine-msg-best-name {
+	color: rgb(74, 133, 228);
+}
+
+.fine-msg-best {
+	font-weight: 300;
+}
+
+.new-best {
+	color: rgb(63, 168, 63);
+}
+
+.restart-button {
+	background-color: rgb(74, 133, 228);
+	border: none;
+	color: white;
+	display: block;
+	padding: 15px 35px;
+	font-size: 20px;
+	margin: auto;
+	margin-top: 5%;
+	font-weight: 500;
+	border-radius: 30px;
+	box-shadow: 5px 5px 10px rgba(101, 131, 179, 0.5);
+	transition: 0.4s;
+	cursor: pointer;
+}
+
+.restart-button:hover {
+	background-color: rgb(111, 155, 226);
+	box-shadow: 6px 6px 15px rgba(65, 89, 128, 0.5);
+	color: #444;
+	transition: 0.4s;
+}
+
+.restart-button:active {
+	background-color: rgb(63, 109, 184);
+	box-shadow: 2px 2px 10px rgba(65, 89, 128, 0.8);
+	color: white;
+	transition: 0.4s;
 }
