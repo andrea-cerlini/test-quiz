@@ -10,104 +10,92 @@ var questionDatabase = [ // Array con tutte le domande, le risposte, il numero d
         question: "Che anno viene dopo il 2020?", // Prima question
         answers: ["2200", "-3", "tabasco", "2021"], // Risposte disponibili
         indexOfTheCorrectAnswer: 4 // Indice della risposta giusta
-        // isAvailable: true
+
     },
     {
         question: "Quanto potassio c'e' in una banana?",
         answers: ["Meno infinito", "In media circa il 9%", "Esattamente 4 chilometri", "Le banane sono in realta' radioattive"],
         indexOfTheCorrectAnswer: 2
-        // isAvailable: true
+
     },
     {
         question: "Ludwig Van Beethoven e' ancora vivo?",
         answers: ["No, e' tipo morto due secoli fa", "Certo =)", "E' morto stamattina", "Si, ma non per molto"],
         indexOfTheCorrectAnswer: 1
-        // isAvailable: true
+
     },
     {
         question: "Che forma ha il display di un televisore standard?",
         answers: ["Verde", "Icosaedro tronco", "Triangolo", "Rettangolo"],
         indexOfTheCorrectAnswer: 4
-        // isAvailable: true
+
     },
     {
         question: "Vero o falso? Gli umani respirano aria",
         answers: ["Vero", "Falso"],
         indexOfTheCorrectAnswer: 1
-        // isAvailable: true
+
     },
     {
         question: "Quale di queste opzioni e' il nome di un giorno della settimana?",
         answers: ["Ginevro", "42", "Sabato", "Domanica"],
         indexOfTheCorrectAnswer: 3
-        // isAvailable: true
+
     },
     {
         question: "Vero o falso? Il sole non e' luminoso",
         answers: ["Vero", "Falso"],
         indexOfTheCorrectAnswer: 2
-        // isAvailable: true
+
     },
     {
         question: "Quanto fa 1+1 (nella matematica classica)?",
         answers: ["Mille", "La matematica e' sopravvalutata", "2", "Radice cubica di e"],
         indexOfTheCorrectAnswer: 3
-        // isAvailable: true
+
     },
     {
         question: "Domanda",
         answers: ["Risposta sbagliata", "Risposta giusta", "Risposta sbagliata", "Risposta non non sbagliata"],
         indexOfTheCorrectAnswer: 2
-        // isAvailable: true
+
     },
     {
         question: "Di che colore sono le arance?",
         answers: ["Nero", "Grillotalpa", "Giallo", "Arancione"],
         indexOfTheCorrectAnswer: 4
-        // isAvailable: true
+
     },
     {
         question: "Quante 'C' ci sono nella parola CIAO?",
         answers: ["Una sola", "Cento", "Fotosintesi clorofilliana", "Zero"],
         indexOfTheCorrectAnswer: 1
-        // isAvailable: true
+
     },
     {
         question: "In che Stato si trova Roma?",
         answers: ["Quattro", "Repubblica di Venezia", "Italia", "Roma non esiste"],
         indexOfTheCorrectAnswer: 3
-        // isAvailable: true
+
     },
     {
         question: "Vero o falso? Un chilo di cipolle pesa un chilo",
         answers: ["Falso", "Vero"],
         indexOfTheCorrectAnswer: 2
-        // isAvailable: true
+
     },
     {
         question: "Che forma hanno gli occhi umani?",
         answers: ["Piramidale", "Scarsa, non hanno muscoli", "Cubica", "Sferica, approssimativamente"],
         indexOfTheCorrectAnswer: 4
-        // isAvailable: true
     },
     {
         question: "Vero o falso? Il monte Everest e' piu' alto di un uomo",
         answers: ["Vero", "Falso", "No", "Aceto"],
         indexOfTheCorrectAnswer: 1
-        // isAvailable: true
     }
 ];
-/* Funzione ormai inutile, prendo la lunghezza dell'array con length
-function getLen(currentQuestionDatabase) {
-    var len = 0;
-    for (var i = 0; i < currentQuestionDatabase.length; i++) {
-        if (currentQuestionDatabase[i].isAvailable) {
-            len++;
-        }
-    }
-    return len;
-}
-*/
+
 function login() {
     var loginWrap = document.getElementsByClassName("login-wrapper").item(0); // Div del login
     var name = document.getElementsByClassName("name").item(0); // Input del name
@@ -125,12 +113,6 @@ function login() {
             {
                 error.classList.remove("hide");
             }
-            /*
-            else
-            {
-                console.log("Gia' avvertito");
-            }
-            */
         }
         else // name non vuoto, termine login
         {
@@ -268,9 +250,6 @@ function quiz() // Visualizzazione quiz
             checkFunction((this.parentElement.rowIndex) * (this.parentElement.childElementCount) + this.cellIndex + 1) // Calcolo dell'indice:
             // Numero righe precedenti, per la loro lunghezza, + il numero di caselle prima di quella corrente (che è pari al suo indice nella riga)
         };
-        if (cellArray.item(i).onclick != null) {
-            cellArray.item(i).onclick = null; // Resetto l'onclick sulle risposte, in caso di riavvio del quiz
-        }
         cellArray.item(i).onclick = checkThis; // Aggiungo il controllo alla cella, singolarmente su ognuna
     }
 
