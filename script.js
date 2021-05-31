@@ -116,6 +116,7 @@ function login() {
         }
         else // name non vuoto, termine login
         {
+            error.classList.add("hide"); // Rinascondo il warning del nome, per i login successivi
             loginWrap.classList.add("hide"); // Nascondo div login
             quiz(); // Faccio partire il quiz
         }
