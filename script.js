@@ -1,12 +1,11 @@
-const QUESTION_NUMBER = 10; // Numero di domande presenti nel quiz
+const QUESTION_NUMBER = 10; // Numero di domande mostrate nel quiz
 var score = 0;
-var n = 0;
+var currentQuestionNumber = 0;
 var currentQuestion;
-var playerDatabase = new Array();
+var playerDatabase = [];
 var currentQuestionDatabase = [];
-var maxAnswerNumber = 0; // Dichiarato qui, inizializzato sotto alla dichiarazione del database delle domande
 
-var questionDatabase = [ // Array con tutte le domande, le risposte, il numero di quella giusta, la disponibilità
+var questionDatabase = [ // Array con tutte le domande, le risposte, il numero di quella giusta
     {
         question: "Che anno viene dopo il 2020?", // Prima question
         answers: ["2200", "-3", "tabasco", "2021"], // Risposte disponibili
@@ -97,15 +96,6 @@ var questionDatabase = [ // Array con tutte le domande, le risposte, il numero d
     }
 ];
 
-// Inizializzazione di maxAnswerNumber, il numero massimo di risposte disponibili per domanda
-for (var i = 0; i < questionDatabase.length; i++) { // For per assegnare il valore reale alla variabile maxAnswerNumber
-    if (questionDatabase[i].answers.length > maxAnswerNumber) {
-        maxAnswerNumber = questionDatabase[i].answers.length;
-    }
-}
-
-console.log("Massimo numero di risposte possibile: " + maxAnswerNumber);
-
 const template = document.createElement("template");
 template.innerHTML = `
 <style>
@@ -128,8 +118,8 @@ template.innerHTML = `
 </slot>
 `;
 
-function clickOnAnswer(index) {
-    return new CustomEvent("click-on-answer", {
+function onAnswerClick(index) {
+    return new CustomEvent("on-answer-click", {
         bubbles: true,
         composed: true,
         detail: {
@@ -138,7 +128,7 @@ function clickOnAnswer(index) {
     })
 }
 
-class answerTable extends HTMLElement {
+class answerContainer extends HTMLElement {
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
@@ -146,21 +136,19 @@ class answerTable extends HTMLElement {
     }
 }
 
-function updateTable(answerNumber) { // Funzione per settare il numero corretto di caselle disponibili per le risposte
+function updateContainer(answerNumber) { // Funzione per settare il numero corretto di caselle disponibili per le risposte
     var answerContainer = document.getElementsByClassName("answer-table").item(0);
     answerContainer.innerHTML = ""; // Inizializzo a vuota la tabella
-    var i = 0;
-    while (i < (answerNumber)) { // While per aggiungere dinamicamente il numero di div necessari per ogni domanda
+    for (i = 0; i < answerNumber; i++) { // While per aggiungere dinamicamente il numero di div necessari per ogni domanda
         var cellBox = document.createElement("div"); // Variabile d'appoggio per creazione div cella
         cellBox.setAttribute("slot", "answers");
         cellBox.setAttribute("index", i + 1);
         cellBox.classList.add("answer");
-        cellBox.style.display = "inline-block";
+        cellBox.innerHTML = currentQuestionDatabase[currentQuestion].answers[num - 1];
         answerContainer.appendChild(cellBox);
         cellBox.onclick = function () {
-            cellBox.dispatchEvent(clickOnAnswer(this.getAttribute("index")));
+            cellBox.dispatchEvent(onAnswerClick(this.getAttribute("index")));
         };
-        i++;
     }
 }
 
@@ -192,39 +180,30 @@ function login() {
     return !nameIsEmpty; // Se mi sono loggato nameIsEmpty è false, ritorno il contrario di nameIsEmpty
 }
 
-function loadQuestion(n, question) {
-    console.log("\n\nCarico la " + (n + 1) + " domanda! (n = " + n + ")\nDomande disponibili: " + currentQuestionDatabase.length);
+function loadQuestion(currentQuestionNumber, question) {
+    console.log("\n\nCarico la " + (currentQuestionNumber + 1) + " domanda! (currentQuestionNumber = " + currentQuestionNumber + ")\nDomande disponibili: " + currentQuestionDatabase.length);
     currentQuestion = parseInt((Math.random() * 100)) % (currentQuestionDatabase.length); // Sceglie una question casuale
 
     console.log("Domanda scelta: " + (currentQuestion + 1)); // Adesso che utilizzo un secondo array, gli indici delle domande possono ripetersi
     question.innerHTML = currentQuestionDatabase[currentQuestion].question; // Carico la question appena scelta
     var answerNumber = currentQuestionDatabase[currentQuestion].answers.length; // Variabile che tiene il numero di risposte disponibili per la question
 
-    updateTable(answerNumber);
-
-    var num = 1; // Variabile per scorrere le opzioni nella question corrente
-    while (num <= answerNumber) // Carico le opzioni della question appena scelta
-    {
-        var currentAnswer = document.getElementsByClassName("answer").item(num - 1); // Carico l'opzione nella cella numero [num - 1]-
-        // - dell'HTMLContainer delle domande (classe CSS)
-        currentAnswer.innerHTML = currentQuestionDatabase[currentQuestion].answers[num - 1]; // Carico le risposte a partire da 0, mentre num parte da 1
-        num++;
-    }
+    updateContainer(answerNumber);
 }
 
 function updateDatabase() {
     console.log("Aggiornamento database");
     var found = false;
     var playerName = document.getElementsByClassName("name").item(0).value;
-    for (var i = 0; i < playerDatabase.length; i++) { // Scorro la lista dei giocatori nel database per vedere se già c'è
-        if (playerName == playerDatabase[i].name) { // Guardo tra i nomi se c'è quello del giocatore corrente
+    playerDatabase.forEach(player => {
+        if (playerName == player.name) { // Guardo tra i nomi se c'è quello del giocatore corrente
             console.log("Giocatore esistente!");
-            if (score > playerDatabase[i].bestScore) { // Se il giocatore è presente, vedo se il suo score è maggiore del best
-                playerDatabase[i].bestScore = score;
+            if (score > player.bestScore) { // Se il giocatore è presente, vedo se il suo score è maggiore del best
+                player.bestScore = score;
             }
             found = true;
         }
-    }
+    });// Scorro la lista dei giocatori nel database per vedere se già c'è
     if (!found) { // Se invece il nome del giocatore non è presente nel database, lo aggiungo a quelli presenti
         playerDatabase.push({ name: playerName, bestScore: score });
     }
@@ -233,10 +212,7 @@ function updateDatabase() {
 function restart() {
     document.getElementsByClassName("game-over-wrapper").item(0).classList.add("hide");
     score = 0;
-    n = 0;
-    for (var i = 0; i < currentQuestionDatabase.length; i++) { // Resetto la disponibilità delle domande
-        currentQuestionDatabase[i].isAvailable = true;
-    }
+    currentQuestionNumber = 0;
     login();
 }
 
@@ -245,11 +221,11 @@ function end() {
     var name = document.getElementsByClassName("name").item(0).value; // Prendo il valore del nome inserito nella funzione login()
 
     var currentPlayer;
-    for (var i = 0; i < playerDatabase.length; i++) { // Seleziono il giocatore corrente
-        if (playerDatabase[i].name == name) {
-            currentPlayer = playerDatabase[i];
+    playerDatabase.forEach(player => {
+        if (player.name == name) {
+            currentPlayer = player;
         }
-    }
+    });
 
     gameOverWrapper.classList.remove("hide");
     document.getElementsByClassName("fine-msg-correct").item(0).innerHTML = score + " su " + QUESTION_NUMBER;
@@ -286,8 +262,8 @@ function checkFunction(event) {
         console.log("Punteggio attuale: " + score);
     }
     currentQuestionDatabase.splice(currentQuestion, 1); // Rimuovo la domanda dall'array corrente
-    if (n < QUESTION_NUMBER) { // Finché non finiscono le domande
-        loadQuestion(n, question);
+    if (currentQuestionNumber < QUESTION_NUMBER) { // Finché non finiscono le domande
+        loadQuestion(currentQuestionNumber, question);
         n++;
     }
     else { // Quiz finito
@@ -309,15 +285,12 @@ function quiz() // Visualizzazione quiz
     console.log("Inizio quiz!");
     quizWrapper.classList.remove("hide"); // Mostro il campo del quiz
 
-    for (var i = 0; i < questionDatabase.length; i++) { // Inizializzo l'array corrente delle domande
-        currentQuestionDatabase[i] = questionDatabase[i];
-    }
+    currentQuestionDatabase = [...questionDatabase]; // Inizializzo l'array corrente delle domande
+    window.customElements.define('answer-table', answerContainer);
 
-    window.customElements.define('answer-table', answerTable);
+    document.getElementsByClassName("answer-table").item(0).addEventListener("on-answer-click", checkFunction, true);
 
-    document.getElementsByClassName("answer-table").item(0).addEventListener("click-on-answer", checkFunction, true);
-
-    loadQuestion(n, question); // Carico la prima question
+    loadQuestion(currentQuestionNumber, question); // Carico la prima question
     n++;
 }
 
