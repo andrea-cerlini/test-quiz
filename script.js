@@ -137,14 +137,14 @@ class answerContainer extends HTMLElement {
 }
 
 function updateContainer(answerNumber) { // Funzione per settare il numero corretto di caselle disponibili per le risposte
-    var answerContainer = document.getElementsByClassName("answer-table").item(0);
+    var answerContainer = document.getElementsByClassName("answer-table")[0];
     answerContainer.innerHTML = ""; // Inizializzo a vuota la tabella
     for (i = 0; i < answerNumber; i++) { // While per aggiungere dinamicamente il numero di div necessari per ogni domanda
         var cellBox = document.createElement("div"); // Variabile d'appoggio per creazione div cella
         cellBox.setAttribute("slot", "answers");
         cellBox.setAttribute("index", i + 1);
         cellBox.classList.add("answer");
-        cellBox.innerHTML = currentQuestionDatabase[currentQuestion].answers[num - 1];
+        cellBox.innerHTML = currentQuestionDatabase[currentQuestion].answers[i];
         answerContainer.appendChild(cellBox);
         cellBox.onclick = function () {
             cellBox.dispatchEvent(onAnswerClick(this.getAttribute("index")));
@@ -153,10 +153,10 @@ function updateContainer(answerNumber) { // Funzione per settare il numero corre
 }
 
 function login() {
-    var loginWrap = document.getElementsByClassName("login-wrapper").item(0); // Div del login
-    var name = document.getElementsByClassName("name").item(0); // Input del name
-    var loginButton = document.getElementsByClassName("login-button").item(0); // Bottone Inizia
-    var error = document.getElementsByClassName("error").item(0); // Paragrafo errore con testo rosso
+    var loginWrap = document.getElementsByClassName("login-wrapper")[0]; // Div del login
+    var name = document.getElementsByClassName("name")[0]; // Input del name
+    var loginButton = document.getElementsByClassName("login-button")[0]; // Bottone Inizia
+    var error = document.getElementsByClassName("error")[0]; // Paragrafo errore con testo rosso
     var nameIsEmpty = true; // Variabile per dirmi se il name è vuoto
 
     loginWrap.classList.remove("hide"); // Rendo visibile il div del login
@@ -191,7 +191,7 @@ function loadQuestion(currentQuestionNumber, question) {
 
 function updateDatabase() {
     var found = false;
-    var playerName = document.getElementsByClassName("name").item(0).value;
+    var playerName = document.getElementsByClassName("name")[0].value;
     playerDatabase.forEach(player => {
         if (playerName == player.name) { // Guardo tra i nomi se c'è quello del giocatore corrente
             if (score > player.bestScore) { // Se il giocatore è presente, vedo se il suo score è maggiore del best
@@ -206,15 +206,15 @@ function updateDatabase() {
 }
 
 function restart() {
-    document.getElementsByClassName("game-over-wrapper").item(0).classList.add("hide");
+    document.getElementsByClassName("game-over-wrapper")[0].classList.add("hide");
     score = 0;
     currentQuestionNumber = 0;
     login();
 }
 
 function end() {
-    var gameOverWrapper = document.getElementsByClassName("game-over-wrapper").item(0);
-    var name = document.getElementsByClassName("name").item(0).value; // Prendo il valore del nome inserito nella funzione login()
+    var gameOverWrapper = document.getElementsByClassName("game-over-wrapper")[0];
+    var name = document.getElementsByClassName("name")[0].value; // Prendo il valore del nome inserito nella funzione login()
 
     var currentPlayer;
     playerDatabase.forEach(player => {
@@ -224,27 +224,27 @@ function end() {
     });
 
     gameOverWrapper.classList.remove("hide");
-    document.getElementsByClassName("fine-msg-correct").item(0).innerHTML = score + " su " + QUESTION_NUMBER;
+    document.getElementsByClassName("fine-msg-correct")[0].innerHTML = score + " su " + QUESTION_NUMBER;
     var percent = (score * 100 / QUESTION_NUMBER);
     var decimalDigits = 2;
-    document.getElementsByClassName("fine-msg-percent").item(0).innerHTML = (Math.round(percent * Math.pow(10, decimalDigits)) / Math.pow(10, decimalDigits)) + "%";
+    document.getElementsByClassName("fine-msg-percent")[0].innerHTML = (Math.round(percent * Math.pow(10, decimalDigits)) / Math.pow(10, decimalDigits)) + "%";
     // Arrotondo la percentuale a 2 cifre dopo la virgola
-    document.getElementsByClassName("fine-msg-best-name").item(0).innerHTML = name;
-    document.getElementsByClassName("fine-msg-best").item(0).innerHTML = currentPlayer.bestScore + " su " + QUESTION_NUMBER;
+    document.getElementsByClassName("fine-msg-best-name")[0].innerHTML = name;
+    document.getElementsByClassName("fine-msg-best")[0].innerHTML = currentPlayer.bestScore + " su " + QUESTION_NUMBER;
     if (score == currentPlayer.bestScore) {
-        document.getElementsByClassName("fine-msg-correct").item(0).innerHTML += " - miglior punteggio! :D";
-        document.getElementsByClassName("fine-msg-correct").item(0).classList.add("new-best");
-        document.getElementsByClassName("fine-msg-best").item(0).classList.add("new-best");
+        document.getElementsByClassName("fine-msg-correct")[0].innerHTML += " - miglior punteggio! :D";
+        document.getElementsByClassName("fine-msg-correct")[0].classList.add("new-best");
+        document.getElementsByClassName("fine-msg-best")[0].classList.add("new-best");
     }
     else {
-        document.getElementsByClassName("fine-msg-correct").item(0).classList.remove("new-best");
-        document.getElementsByClassName("fine-msg-best").item(0).classList.remove("new-best");
+        document.getElementsByClassName("fine-msg-correct")[0].classList.remove("new-best");
+        document.getElementsByClassName("fine-msg-best")[0].classList.remove("new-best");
     }
-    document.getElementsByClassName("restart-button").item(0).onclick = restart;
+    document.getElementsByClassName("restart-button")[0].onclick = restart;
 }
 
 function checkFunction(event) {
-    var question = document.getElementsByClassName("question-paragraph").item(0); // Paragrafo della question
+    var question = document.getElementsByClassName("question-paragraph")[0]; // Paragrafo della question
     if (event.detail.index == currentQuestionDatabase[currentQuestion].indexOfTheCorrectAnswer) { // Controllo se l'indice della risposta corrente-
         // - è uguale a quello giusto per questa domanda
         score++;
@@ -252,10 +252,10 @@ function checkFunction(event) {
     currentQuestionDatabase.splice(currentQuestion, 1); // Rimuovo la domanda dall'array corrente
     if (currentQuestionNumber < QUESTION_NUMBER) { // Finché non finiscono le domande
         loadQuestion(currentQuestionNumber, question);
-        n++;
+        currentQuestionNumber++;
     }
     else { // Quiz finito
-        document.getElementsByClassName("quiz-wrapper").item(0).classList.add("hide"); // Nascondo la pagina del quiz
+        document.getElementsByClassName("quiz-wrapper")[0].classList.add("hide"); // Nascondo la pagina del quiz
         updateDatabase(); // Aggiorno il database dei giocatori
         end(); // Mostro la schermata finale
     }
@@ -268,17 +268,17 @@ function insertAfter(newNode, referenceNode) { // Funzione di utility per inseri
 
 function quiz() // Visualizzazione quiz
 {
-    var quizWrapper = document.getElementsByClassName("quiz-wrapper").item(0); // Div del quiz
-    var question = document.getElementsByClassName("question-paragraph").item(0); // Paragrafo della question
+    var quizWrapper = document.getElementsByClassName("quiz-wrapper")[0]; // Div del quiz
+    var question = document.getElementsByClassName("question-paragraph")[0]; // Paragrafo della question
     quizWrapper.classList.remove("hide"); // Mostro il campo del quiz
 
     currentQuestionDatabase = [...questionDatabase]; // Inizializzo l'array corrente delle domande
     window.customElements.define('answer-table', answerContainer);
 
-    document.getElementsByClassName("answer-table").item(0).addEventListener("on-answer-click", checkFunction, true);
+    document.getElementsByClassName("answer-table")[0].addEventListener("on-answer-click", checkFunction, true);
 
     loadQuestion(currentQuestionNumber, question); // Carico la prima question
-    n++;
+    currentQuestionNumber++;
 }
 
 window.onload = function () {
