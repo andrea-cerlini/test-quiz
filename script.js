@@ -181,10 +181,8 @@ function login() {
 }
 
 function loadQuestion(currentQuestionNumber, question) {
-    console.log("\n\nCarico la " + (currentQuestionNumber + 1) + " domanda! (currentQuestionNumber = " + currentQuestionNumber + ")\nDomande disponibili: " + currentQuestionDatabase.length);
     currentQuestion = parseInt((Math.random() * 100)) % (currentQuestionDatabase.length); // Sceglie una question casuale
 
-    console.log("Domanda scelta: " + (currentQuestion + 1)); // Adesso che utilizzo un secondo array, gli indici delle domande possono ripetersi
     question.innerHTML = currentQuestionDatabase[currentQuestion].question; // Carico la question appena scelta
     var answerNumber = currentQuestionDatabase[currentQuestion].answers.length; // Variabile che tiene il numero di risposte disponibili per la question
 
@@ -192,12 +190,10 @@ function loadQuestion(currentQuestionNumber, question) {
 }
 
 function updateDatabase() {
-    console.log("Aggiornamento database");
     var found = false;
     var playerName = document.getElementsByClassName("name").item(0).value;
     playerDatabase.forEach(player => {
         if (playerName == player.name) { // Guardo tra i nomi se c'è quello del giocatore corrente
-            console.log("Giocatore esistente!");
             if (score > player.bestScore) { // Se il giocatore è presente, vedo se il suo score è maggiore del best
                 player.bestScore = score;
             }
@@ -248,18 +244,10 @@ function end() {
 }
 
 function checkFunction(event) {
-    console.log(event.detail.index);
     var question = document.getElementsByClassName("question-paragraph").item(0); // Paragrafo della question
-    console.log("Controllo risposta...");
     if (event.detail.index == currentQuestionDatabase[currentQuestion].indexOfTheCorrectAnswer) { // Controllo se l'indice della risposta corrente-
         // - è uguale a quello giusto per questa domanda
-        console.log("Risposta giusta!");
         score++;
-        console.log("Punteggio attuale: " + score);
-    }
-    else {
-        console.log("Risposta sbagliata!, la risposta giusta era " + currentQuestionDatabase[currentQuestion].answers[currentQuestionDatabase[currentQuestion].indexOfTheCorrectAnswer - 1]);
-        console.log("Punteggio attuale: " + score);
     }
     currentQuestionDatabase.splice(currentQuestion, 1); // Rimuovo la domanda dall'array corrente
     if (currentQuestionNumber < QUESTION_NUMBER) { // Finché non finiscono le domande
@@ -282,7 +270,6 @@ function quiz() // Visualizzazione quiz
 {
     var quizWrapper = document.getElementsByClassName("quiz-wrapper").item(0); // Div del quiz
     var question = document.getElementsByClassName("question-paragraph").item(0); // Paragrafo della question
-    console.log("Inizio quiz!");
     quizWrapper.classList.remove("hide"); // Mostro il campo del quiz
 
     currentQuestionDatabase = [...questionDatabase]; // Inizializzo l'array corrente delle domande
