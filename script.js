@@ -4,6 +4,7 @@ var n = 0;
 var currentQuestion;
 var playerDatabase = new Array();
 var currentQuestionDatabase = [];
+var maxAnswerNumber = 0; // Dichiarato qui, inizializzato sotto alla dichiarazione del database delle domande
 
 var questionDatabase = [ // Array con tutte le domande, le risposte, il numero di quella giusta, la disponibilità
     {
@@ -96,6 +97,74 @@ var questionDatabase = [ // Array con tutte le domande, le risposte, il numero d
     }
 ];
 
+// Inizializzazione di maxAnswerNumber, il numero massimo di risposte disponibili per domanda
+for (var i = 0; i < questionDatabase.length; i++) { // For per assegnare il valore reale alla variabile maxAnswerNumber
+    if (questionDatabase[i].answers.length > maxAnswerNumber) {
+        maxAnswerNumber = questionDatabase[i].answers.length;
+    }
+}
+
+console.log("Massimo numero di risposte possibile: " + maxAnswerNumber);
+
+const template = document.createElement("template");
+template.innerHTML = `
+<style>
+    ::host {
+        display: block;
+        contain: content;
+    }
+    a {
+        color: red;
+        text-decoration: none;
+    }
+    slot {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+</style>
+<slot name='answers' class="answer-container">
+</slot>
+`;
+
+function clickOnAnswer(index) {
+    return new CustomEvent("click-on-answer", {
+        bubbles: true,
+        composed: true,
+        detail: {
+            index
+        }
+    })
+}
+
+class answerTable extends HTMLElement {
+    constructor() {
+        super();
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.appendChild(template.content.cloneNode(true));
+    }
+}
+
+function updateTable(answerNumber) { // Funzione per settare il numero corretto di caselle disponibili per le risposte
+    var answerContainer = document.getElementsByClassName("answer-table").item(0);
+    answerContainer.innerHTML = ""; // Inizializzo a vuota la tabella
+    var i = 0;
+    while (i < (answerNumber)) { // While per aggiungere dinamicamente il numero di div necessari per ogni domanda
+        var cellBox = document.createElement("div"); // Variabile d'appoggio per creazione div cella
+        cellBox.setAttribute("slot", "answers");
+        cellBox.setAttribute("index", i + 1);
+        cellBox.classList.add("answer");
+        cellBox.style.display = "inline-block";
+        answerContainer.appendChild(cellBox);
+        var newEvent = clickOnAnswer(i);
+        cellBox.onclick = function () {
+            cellBox.dispatchEvent(newEvent);
+        };
+        i++;
+    }
+}
+
 function login() {
     var loginWrap = document.getElementsByClassName("login-wrapper").item(0); // Div del login
     var name = document.getElementsByClassName("name").item(0); // Input del name
@@ -124,27 +193,20 @@ function login() {
     return !nameIsEmpty; // Se mi sono loggato nameIsEmpty è false, ritorno il contrario di nameIsEmpty
 }
 
-function loadQuestion(n, question, secondRowOfAnswerTable) {
+function loadQuestion(n, question) {
     console.log("\n\nCarico la " + (n + 1) + " domanda! (n = " + n + ")\nDomande disponibili: " + currentQuestionDatabase.length);
     currentQuestion = parseInt((Math.random() * 100)) % (currentQuestionDatabase.length); // Sceglie una question casuale
 
     console.log("Domanda scelta: " + (currentQuestion + 1)); // Adesso che utilizzo un secondo array, gli indici delle domande possono ripetersi
     question.innerHTML = currentQuestionDatabase[currentQuestion].question; // Carico la question appena scelta
     var answerNumber = currentQuestionDatabase[currentQuestion].answers.length; // Variabile che tiene il numero di risposte disponibili per la question
-    if (answerNumber == 4) // In caso le risposte disponibili siano 4, visualizzo anche la seconda riga
-    {
-        secondRowOfAnswerTable.classList.remove("hide");
-    }
-    else if (!secondRowOfAnswerTable.classList.contains("hide")) // In caso siano invece 2, nascondo la seconda riga in caso non sia già-
-    // - stata nascosta 
-    {
-        secondRowOfAnswerTable.classList.add("hide");
-    }
+
+    updateTable(answerNumber);
 
     var num = 1; // Variabile per scorrere le opzioni nella question corrente
     while (num <= answerNumber) // Carico le opzioni della question appena scelta
     {
-        var currentAnswer = document.getElementsByClassName("answers").item(num - 1); // Carico l'opzione nella cella numero [num - 1]-
+        var currentAnswer = document.getElementsByClassName("answer").item(num - 1); // Carico l'opzione nella cella numero [num - 1]-
         // - dell'HTMLContainer delle domande (classe CSS)
         currentAnswer.innerHTML = currentQuestionDatabase[currentQuestion].answers[num - 1]; // Carico le risposte a partire da 0, mentre num parte da 1
         num++;
@@ -181,13 +243,15 @@ function restart() {
 
 function end() {
     var gameOverWrapper = document.getElementsByClassName("game-over-wrapper").item(0);
-    var name = document.getElementsByClassName("name").item(0).value; // Input del name
+    var name = document.getElementsByClassName("name").item(0).value; // Prendo il valore del nome inserito nella funzione login()
+
     var currentPlayer;
-    for (var i = 0; i < playerDatabase.length; i++) {
+    for (var i = 0; i < playerDatabase.length; i++) { // Seleziono il giocatore corrente
         if (playerDatabase[i].name == name) {
             currentPlayer = playerDatabase[i];
         }
     }
+
     gameOverWrapper.classList.remove("hide");
     document.getElementsByClassName("fine-msg-correct").item(0).innerHTML = score + " su " + QUESTION_NUMBER;
     var percent = (score * 100 / QUESTION_NUMBER);
@@ -208,12 +272,12 @@ function end() {
     document.getElementsByClassName("restart-button").item(0).onclick = restart;
 }
 
-function checkFunction(currentAnswerNum) {
+function checkFunction(event) {
+    console.log(event.detail.index);
     var question = document.getElementsByClassName("question-paragraph").item(0); // Paragrafo della question
-    var secondRowOfAnswerTable = document.getElementsByClassName("second-row-of-answer-table").item(0); // Seconda riga risposte
     console.log("Controllo risposta...");
-    if (currentAnswerNum == currentQuestionDatabase[currentQuestion].indexOfTheCorrectAnswer) { // Controllo se l'indice della risposta corrente-
-        // - è uguale a quella giusta per questa domanda
+    if (event.detail.index == currentQuestionDatabase[currentQuestion].indexOfTheCorrectAnswer) { // Controllo se l'indice della risposta corrente-
+        // - è uguale a quello giusto per questa domanda
         console.log("Risposta giusta!");
         score++;
         console.log("Punteggio attuale: " + score);
@@ -224,41 +288,37 @@ function checkFunction(currentAnswerNum) {
     }
     currentQuestionDatabase.splice(currentQuestion, 1); // Rimuovo la domanda dall'array corrente
     if (n < QUESTION_NUMBER) { // Finché non finiscono le domande
-        loadQuestion(n, question, secondRowOfAnswerTable);
+        loadQuestion(n, question);
         n++;
     }
     else { // Quiz finito
-        document.getElementsByClassName("quiz-wrapper").item(0).classList.add("hide");
-        updateDatabase();
-        end();
+        document.getElementsByClassName("quiz-wrapper").item(0).classList.add("hide"); // Nascondo la pagina del quiz
+        updateDatabase(); // Aggiorno il database dei giocatori
+        end(); // Mostro la schermata finale
     }
+}
+
+function insertAfter(newNode, referenceNode) { // Funzione di utility per inserire l'elemento nel primo argomento subito dopo quello specificato-
+    // - nel secondo argomento
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 function quiz() // Visualizzazione quiz
 {
-    var cellArray = document.getElementsByClassName("answers");
-    var answerTable = document.getElementsByClassName("answer-table").item(0);
     var quizWrapper = document.getElementsByClassName("quiz-wrapper").item(0); // Div del quiz
     var question = document.getElementsByClassName("question-paragraph").item(0); // Paragrafo della question
-    var secondRowOfAnswerTable = document.getElementsByClassName("second-row-of-answer-table").item(0); // Seconda riga di risposte, dovrò visualizzarla-
-    // - solo per le domande con 4 risposte
     console.log("Inizio quiz!");
     quizWrapper.classList.remove("hide"); // Mostro il campo del quiz
-
-    for (var i = 0; i < answerTable.rows.length * answerTable.rows[0].cells.length; i++) // Scorro tutte le caselle della tabella
-    {
-        var checkThis = function () {
-            checkFunction((this.parentElement.rowIndex) * (this.parentElement.childElementCount) + this.cellIndex + 1) // Calcolo dell'indice:
-            // Numero righe precedenti, per la loro lunghezza, + il numero di caselle prima di quella corrente (che è pari al suo indice nella riga)
-        };
-        cellArray.item(i).onclick = checkThis; // Aggiungo il controllo alla cella, singolarmente su ognuna
-    }
 
     for (var i = 0; i < questionDatabase.length; i++) { // Inizializzo l'array corrente delle domande
         currentQuestionDatabase[i] = questionDatabase[i];
     }
 
-    loadQuestion(n, question, secondRowOfAnswerTable); // Carico la prima question
+    window.customElements.define('answer-table', answerTable);
+
+    document.getElementsByClassName("answer-table").item(0).addEventListener("click-on-answer", checkFunction, true);
+
+    loadQuestion(n, question); // Carico la prima question
     n++;
 }
 

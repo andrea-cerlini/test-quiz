@@ -97,11 +97,14 @@ body {
 .answer-table {
 	border-spacing: 15px;
 	width: 100%;
+	row-gap: 10%;
 }
 
-td {
-	width: 25%;
-	padding: 3.5% 0;
+.answer {
+	width: 45%;
+	margin: 2%;
+	box-sizing: border-box;
+	padding: 3.5% 3.5%;
 	border-radius: 5px;
 	text-align: center;
 	background-color: rgb(73, 137, 211);
@@ -113,13 +116,13 @@ td {
 	transition: 0.4s;
 }
 
-td:hover {
+.answer:hover {
 	background-color: rgb(107, 155, 211);
 	border: 2px solid #777;
 	transition: 0.4s;
 }
 
-td:active {
+.answer:active {
 	background-color: rgba(99, 150, 209, 0.5);
 	border: 2px solid #333;
 	color: #444;
