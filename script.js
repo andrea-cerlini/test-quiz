@@ -157,9 +157,8 @@ function updateTable(answerNumber) { // Funzione per settare il numero corretto 
         cellBox.classList.add("answer");
         cellBox.style.display = "inline-block";
         answerContainer.appendChild(cellBox);
-        var newEvent = clickOnAnswer(i);
         cellBox.onclick = function () {
-            cellBox.dispatchEvent(newEvent);
+            cellBox.dispatchEvent(clickOnAnswer(this.getAttribute("index")));
         };
         i++;
     }
