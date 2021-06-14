@@ -187,10 +187,6 @@ function restart() {
   document.getElementsByClassName('game-over-wrapper')[0].classList.add('hide');
   score = 0;
   n = 0;
-  for (var i = 0; i < currentQuestionDatabase.length; i++) {
-    // Resetto la disponibilità delle domande
-    currentQuestionDatabase[i].isAvailable = true;
-  }
   login();
 }
 
