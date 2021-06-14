@@ -299,12 +299,6 @@ function checkFunction(event) {
   }
 }
 
-function insertAfter(newNode, referenceNode) {
-  // Funzione di utility per inserire l'elemento nel primo argomento subito dopo quello specificato-
-  // - nel secondo argomento
-  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-}
-
 function quiz() {
   // Visualizzazione quiz
   var quizWrapper = document.getElementsByClassName('quiz-wrapper')[0]; // Div del quiz
